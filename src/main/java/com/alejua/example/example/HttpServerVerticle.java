@@ -9,6 +9,7 @@ public class HttpServerVerticle extends AbstractVerticle {
 
 	@Override
 	public void start(Promise<Void> startPromise) throws Exception {
+		System.out.println("Init HttpServerVerticle");
 		super.start();
 
 		System.out.println("creo httpServer");

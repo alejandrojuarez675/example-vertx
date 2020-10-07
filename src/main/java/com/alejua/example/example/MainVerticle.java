@@ -10,6 +10,7 @@ public class MainVerticle extends AbstractVerticle {
 
 		System.out.println("deploy verticles");
 		vertx.deployVerticle(new HttpServerVerticle());
+		vertx.deployVerticle(new ExampleVerticle());
 
 	}
 }
