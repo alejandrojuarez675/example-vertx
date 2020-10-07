@@ -5,16 +5,16 @@ import io.vertx.core.Vertx;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
 
-public class ExampleHandler implements Handler<RoutingContext> {
+public class ExampleRouter implements Handler<RoutingContext> {
 
 	private Router router;
 
-	public ExampleHandler(Vertx vertx, Router router) {
-		System.out.println("Init exampleHandler");
+	public ExampleRouter(Vertx vertx, Router router, String path) {
+		System.out.println("Init exampleRouter");
         this.router = router;
 
-        router.get("/").handler(ctx-> {
-        	System.out.println("llamo a /example/");
+        router.get(path + "/saludo").handler(ctx-> {
+        	System.out.println("llamo a /example/saludo");
         	ctx.response().end("hola");
         });
 

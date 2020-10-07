@@ -16,8 +16,8 @@ public class HttpServerVerticle extends AbstractVerticle {
 
 		System.out.println("init rutas");
 		Router router = Router.router(vertx);
-		router.route("/example").handler(new ExampleHandler(vertx, router));
-		router.route("/*").handler(ErrorHandler::notFountError);
+		router.route("/example").handler(new ExampleRouter(vertx, router, "/example"));
+		router.route().handler(ErrorHandler::notFountError);
 		
 		server.requestHandler(router).listen(8888, http -> {
 			if (http.succeeded()) {
