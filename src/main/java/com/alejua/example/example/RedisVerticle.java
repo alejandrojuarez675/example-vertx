@@ -17,6 +17,8 @@ public class RedisVerticle extends AbstractVerticle {
 
 	@Override
 	public void start(Future<Void> startFuture) throws Exception {
+		logger.info("Init RedisVerticle");
+
 		super.start();
 
 		Redis.createClient(vertx, "redis://localhost:6379").connect(onConnect -> {
@@ -41,6 +43,7 @@ public class RedisVerticle extends AbstractVerticle {
 				msg.reply(lectura);
 			} else {
 				logger.error(res.cause());
+				msg.fail(0, res.cause().getMessage());
 			}
 		});
 	}

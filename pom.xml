@@ -45,6 +45,11 @@
 		<artifactId>vertx-redis-client</artifactId>
 	</dependency>
 
+	<dependency>
+		<groupId>io.vertx</groupId>
+		<artifactId>vertx-pg-client</artifactId>
+	</dependency>
+
     <dependency>
       <groupId>io.vertx</groupId>
       <artifactId>vertx-junit5</artifactId>

@@ -16,6 +16,7 @@ public class MainVerticle extends AbstractVerticle {
 		vertx.deployVerticle(new HttpServerVerticle());
 		vertx.deployVerticle(new ExampleVerticle());
 		vertx.deployVerticle(new RedisVerticle());
+		vertx.deployVerticle(new DatabaseVerticle());
 
 	}
 }
