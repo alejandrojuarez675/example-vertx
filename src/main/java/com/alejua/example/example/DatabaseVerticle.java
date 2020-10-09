@@ -35,24 +35,26 @@ public class DatabaseVerticle extends AbstractVerticle {
 				.setUser("postgres")
 				.setPassword("postgres");
 
-		PoolOptions poolOptions = new PoolOptions().setMaxSize(5);
+		PoolOptions poolOptions = new PoolOptions();
 
-		vertx.eventBus().consumer(ADDR_GET_USERS, msg -> eventTargetGetUsers(msg, connectOptions, poolOptions));
+		PgPool client = PgPool.pool(vertx, connectOptions, poolOptions);
+		
+		vertx.eventBus().consumer(ADDR_GET_USERS, msg -> eventTargetGetUsers(msg, client));
 
 	}
 
-	private void eventTargetGetUsers(Message<Object> msg, PgConnectOptions connectOptions, PoolOptions poolOptions) {
+	private void eventTargetGetUsers(Message<Object> msg, PgPool client) {
 
-		PgPool client = PgPool.pool(vertx, connectOptions, poolOptions);
-		client.query("SELECT * FROM users").execute(ar -> {
+		client.query("SELECT id, nombre FROM users").execute(ar -> {
 			if (ar.succeeded()) {
 				logger.info("res desde la db");
 				
 				Spliterator<Row> spliteratorUnknownSize = Spliterators.spliteratorUnknownSize(
 						ar.result().iterator(), Spliterator.ORDERED);
 				
-				List<String> res = StreamSupport.stream(spliteratorUnknownSize, false)
-						.map(x->x.getString(1))
+				List<JsonObject> res = StreamSupport.stream(spliteratorUnknownSize, false)
+						.map(x-> new User(x.getLong(0), x.getString(1)))
+						.map(JsonObject::mapFrom)
 						.collect(Collectors.toList());
 				
 				JsonObject object = new JsonObject().put("usuarios", res);
@@ -63,7 +65,6 @@ public class DatabaseVerticle extends AbstractVerticle {
 				msg.fail(0, ar.cause().getMessage());
 			}
 
-			client.close();
 		});
 	}
 }
