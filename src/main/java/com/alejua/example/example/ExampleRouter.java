@@ -2,15 +2,19 @@ package com.alejua.example.example;
 
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
+import io.vertx.core.logging.Logger;
+import io.vertx.core.logging.LoggerFactory;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
 
 public class ExampleRouter implements Handler<RoutingContext> {
 
+	private static final Logger logger = LoggerFactory.getLogger(ExampleRouter.class);
+
 	private Router router;
 
 	public ExampleRouter(Vertx vertx, Router router, String path) {
-		System.out.println("Init exampleRouter");
+		logger.info("Init exampleRouter");
 		this.router = router;
 
 		router.get(path + "/saludo").handler(ctx -> getSaludo(ctx, vertx));
@@ -18,7 +22,7 @@ public class ExampleRouter implements Handler<RoutingContext> {
 	}
 
 	private void getSaludo(RoutingContext ctx, Vertx vertx) {
-		System.out.println("llamo a /example/saludo");
+		logger.info("llamo a /example/saludo");
 
 		vertx.eventBus().request(ExampleVerticle.ADD_SALUDO, null, reply -> {
 			if (reply.succeeded()) {
